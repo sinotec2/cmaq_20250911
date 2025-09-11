@@ -1,0 +1,19 @@
+nc=../ptse/fortBE.413_teds11.ptsE02.nc
+pr_tflag.py $nc > a
+grep -n '2019-02-25 00:00:00' a
+grep -n '2019-02-28 00:00:00' a
+ncks -O -d TSTEP,280,401 $nc ptseA.nc
+ncks -O -d TSTEP,592,665 $nc ptseB.nc
+
+nc=/nas2/camxruns/2019_v7.1p/ptse/ptse.1903.nc
+pr_tflag.py $nc > b
+grep -n '2019-03-11 00:00:00' b
+grep -n '2019-03-14 00:00:00' b
+ncks -O -d TSTEP,312,385 $nc ptseC.nc
+ncks -O -d TSTEP,648,721 $nc ptseD.nc
+
+vi chngYear.py
+python chngYear.py
+for i in A B C D;do nc=ptse$i.nc;echo $i $(pr_tflag.py $nc|tail -n1);done
+for i in A B C D;do nc=ptse$i.nc;echo $i $(pr_tflag.py $nc|head -n1);done
+c2j 20240328
